@@ -1,5 +1,5 @@
 // ISI DENGAN URL APPS SCRIPT ANDA
-const API_URL = "https://script.google.com/macros/s/AKfycbwFjLebglR-F5nus7jgrOJhfeWC2-Fc6I8HIopGyI0RmFvgd1-bNBME3atFav3AnarDkA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxd7XbxiT4KVROt-zzZfC1a7lSRKy1KF-KUFHLmeOsFbtV3UycOYUwxFgXJn13n00vH/exec";
 
 let currentUser = null;
 let dbUsers = [];
