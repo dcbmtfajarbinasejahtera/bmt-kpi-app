@@ -1,5 +1,5 @@
 // ISI DENGAN URL GOOGLE APPS SCRIPT DARI TAHAP 2
-const API_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxa974BGepRqFGhMuHRmr7VD-gLJSaaMAaSvLVEx1GFceEn6w9DOEewS0jui0C_Ul_E2w/exec";
 
 // Local Data Store
 let currentUser = null;
