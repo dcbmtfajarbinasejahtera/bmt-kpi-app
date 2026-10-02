@@ -10,6 +10,19 @@ let dbUsers = [
   { username: 'fo_siti', password: '123', nama: 'Siti Rahma', role: 'FO', tgl_masuk: '2023-01-20', jabatan: 'Funding Officer', cabang: 'Cabang Cileungsi' }
 ];
 
+//SELANJUTNYA SISIPKAN FUNGSI FETCH INI DI SINI
+async function loadDataFromSheets() {
+  try {
+    const res = await fetch(API_URL + "?action=getUsers");
+    const data = await res.json();
+    if (data && data.length > 0) {
+      dbUsers = data; // Menggantikan array dbUsers lokal
+    }
+  } catch (err) {
+    console.log("Gagal mengambil data dari Google Sheets, menggunakan data cadangan.", err);
+  }
+}
+
 let dbKPIAO = {
   'ao_budi': {
     outstanding: 3200000000,
@@ -152,3 +165,8 @@ function switchTab(tab) {
     document.getElementById('section-fo').classList.remove('hidden');
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  lucide.createIcons();
+  loadDataFromSheets(); // Panggil fungsi fetch saat halaman web dibuka
+});
