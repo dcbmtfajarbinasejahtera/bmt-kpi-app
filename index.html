@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KPI Master - KSPPS BMT Fajar Bina Sejahtera</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons via CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col font-sans">
+
+  <!-- LOGIN PAGE -->
+  <div id="login-page" class="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
+      <div class="text-center mb-6">
+        <div class="bg-emerald-600 text-white p-3 rounded-full inline-block mb-3">
+          <i data-lucide="building" class="w-8 h-8"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-slate-800">BMT FAJAR BINA SEJAHTERA</h1>
+        <p class="text-sm text-slate-500">Sistem Informasi KPI Master Seluruh Divisi</p>
+      </div>
+      <form id="login-form" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Username ID</label>
+          <input type="text" id="username" class="w-full border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Masukkan username" required>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+          <input type="password" id="password" class="w-full border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Masukkan password" required>
+        </div>
+        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-lg shadow-md transition duration-200">
+          Masuk ke Sistem KPI
+        </button>
+      </form>
+      <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 text-center">
+        Demo Login: <br>
+        Admin: <b>admin / 123</b> | AO: <b>ao_budi / 123</b> | FO: <b>fo_siti / 123</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP (HIDDEN UNTIL LOGIN) -->
+  <div id="app-page" class="hidden flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="bg-slate-800 text-white px-6 py-4 flex justify-between items-center shadow-md">
+      <div class="flex items-center space-x-3">
+        <i data-lucide="building" class="text-emerald-400 w-7 h-7"></i>
+        <div>
+          <h1 class="font-bold text-lg leading-tight">KSPPS BMT FAJAR BINA SEJAHTERA</h1>
+          <p class="text-xs text-slate-400">Dashboard Evaluasi Kinerja (KPI Master)</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-4">
+        <div class="text-right">
+          <p id="user-display-name" class="font-semibold text-sm">-</p>
+          <span id="user-display-role" class="bg-emerald-500/20 text-emerald-300 text-xs px-2 py-0.5 rounded-full border border-emerald-500/30">-</span>
+        </div>
+        <button id="logout-btn" class="p-2 bg-slate-700 hover:bg-red-600 rounded-lg transition">
+          <i data-lucide="log-out" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content Container -->
+    <div class="flex-1 p-6 max-w-7xl w-full mx-auto space-y-6">
+      
+      <!-- Admin Navigation -->
+      <div id="admin-nav" class="hidden bg-white p-2 rounded-xl shadow-sm border border-slate-200 flex space-x-2">
+        <button onclick="switchTab('ao')" class="px-4 py-2 rounded-lg text-sm font-medium bg-emerald-600 text-white">Dashboard AO</button>
+        <button onclick="switchTab('fo')" class="px-4 py-2 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200">Dashboard FO</button>
+      </div>
+
+      <!-- AO SECTION -->
+      <div id="section-ao" class="space-y-6">
+        <!-- Identity Card -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap justify-between items-center gap-4">
+          <div class="flex items-center space-x-4">
+            <div class="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xl border-2 border-emerald-500" id="ao-avatar">AO</div>
+            <div>
+              <h2 id="ao-nama" class="text-xl font-bold text-slate-800">-</h2>
+              <p class="text-sm text-slate-500"><span id="ao-jabatan">-</span> — <span id="ao-cabang" class="font-semibold text-emerald-600">-</span></p>
+              <div class="flex items-center space-x-4 text-xs text-slate-500 mt-2">
+                <span>Tgl Masuk: <b id="ao-tgl">-</b></span>
+                <span>•</span>
+                <span>Masa Kerja: <b id="ao-masa-kerja" class="text-slate-700">-</b></span>
+              </div>
+            </div>
+          </div>
+          <div id="ao-selector-box" class="hidden flex items-center space-x-2 bg-slate-50 p-2 rounded-lg border border-slate-200">
+            <label class="text-xs font-semibold text-slate-600">Pilih AO:</label>
+            <select id="select-ao" onchange="renderAODashboard(this.value)" class="bg-white border border-slate-300 rounded text-sm p-1">
+              <option value="ao_budi">Budi Santoso (Cabang Cileungsi)</option>
+              <option value="ao_fauzi">Ahmad Fauzi (Cabang Cibubur)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Target Banner -->
+        <div class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-5 rounded-2xl shadow-md flex justify-between items-center">
+          <div>
+            <p class="text-xs uppercase tracking-wider text-emerald-100 font-semibold">Kategori Target Pencairan AO</p>
+            <h3 id="ao-kategori" class="text-2xl font-bold">Kategori: -</h3>
+            <p class="text-xs text-emerald-100 mt-1">Berdasarkan OS berjalan saat ini (<span id="ao-os-text">Rp 0</span>)</p>
+          </div>
+          <div class="text-right bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20">
+            <p class="text-xs text-emerald-100">Target Pencairan Bulan Ini</p>
+            <p id="ao-target-pencairan" class="text-xl font-extrabold">Rp 0</p>
+          </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-slate-800">Perkembangan Bulanan (Jan - Des)</h3>
+            <select id="ao-metric-select" onchange="updateAOChart()" class="border border-slate-300 rounded-lg text-sm p-2">
+              <option value="outstanding">Outstanding (OS)</option>
+              <option value="pencairan">Pencairan</option>
+              <option value="npf">NPF (%)</option>
+              <option value="visit">Visit</option>
+            </select>
+          </div>
+          <div class="h-72">
+            <canvas id="aoChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- FO SECTION -->
+      <div id="section-fo" class="hidden space-y-6">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <h2 id="fo-nama" class="text-xl font-bold text-slate-800">Siti Rahma</h2>
+          <p class="text-sm text-slate-500">Funding Officer — <span class="font-semibold text-teal-600">Cabang Cileungsi</span></p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-xs text-slate-500">Visit (Target 100/bln)</p>
+            <p id="fo-visit" class="text-lg font-bold text-teal-600">112 Orang</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-xs text-slate-500">Fresh Fund Tabungan</p>
+            <p id="fo-tabungan" class="text-lg font-bold text-slate-800">Rp 120.000.000</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
